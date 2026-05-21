@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Derek Daly</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --ink: #1a1714;
+      --parchment: #f5f0e8;
+      --warm: #c8b89a;
+      --accent: #8b4513;
+      --muted: #6b6358;
+      --light: #ede8df;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--parchment);
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 4rem;
+      background: var(--parchment);
+      border-bottom: 1px solid var(--warm);
+    }
+
+    .nav-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      letter-spacing: 0.05em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    /* HERO */
+    #home {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 8rem 4rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      top: 0; right: 0;
+      width: 45%;
+      height: 100%;
+      background: var(--light);
+      clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%);
+      z-index: 0;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 600px;
+    }
+
+    .hero-label {
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+    }
+
+    .hero-name {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 6vw, 5rem);
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-name em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-tagline {
+      font-size: 1.1rem;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 480px;
+      font-weight: 300;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-photo {
+      position: absolute;
+      right: 6%;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 2;
+      width: 280px;
+      height: 340px;
+      object-fit: cover;
+      border: 6px solid var(--parchment);
+      box-shadow: 12px 12px 0 var(--warm);
+    }
+
+    .hero-photo-placeholder {
+      position: absolute;
+      right: 6%;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 2;
+      width: 280px;
+      height: 340px;
+      background: var(--warm);
+      border: 6px solid var(--parchment);
+      box-shadow: 12px 12px 0 var(--accent);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--parchment);
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      text-align: center;
+      padding: 1rem;
+      gap: 0.5rem;
+    }
+
+    .hero-photo-placeholder span {
+      font-size: 3rem;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.85rem 2rem;
+      background: var(--accent);
+      color: var(--parchment);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      background: var(--ink);
+      transform: translate(-2px, -2px);
+      box-shadow: 4px 4px 0 var(--warm);
+    }
+
+    /* SECTIONS */
+    section {
+      padding: 6rem 4rem;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      margin-bottom: 3rem;
+      line-height: 1.2;
+    }
+
+    /* ABOUT */
+    #about {
+      background: var(--ink);
+      color: var(--parchment);
+    }
+
+    #about .section-label { color: var(--warm); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .about-text {
+      font-size: 1.05rem;
+      line-height: 1.9;
+      color: #c8bfb0;
+      font-weight: 300;
+    }
+
+    .about-text p + p { margin-top: 1.5rem; }
+
+    .about-details { display: flex; flex-direction: column; gap: 2rem; }
+
+    .detail-item {
+      border-left: 2px solid var(--accent);
+      padding-left: 1.5rem;
+    }
+
+    .detail-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--warm);
+      margin-bottom: 0.4rem;
+    }
+
+    .detail-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--parchment);
+    }
+
+    /* SKILLS */
+    .skills-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .skill-tag {
+      padding: 0.4rem 1rem;
+      border: 1px solid var(--warm);
+      color: var(--warm);
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* PROJECTS */
+    #projects { background: var(--light); }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+
+    .project-card {
+      background: var(--parchment);
+      padding: 2.5rem;
+      border-bottom: 3px solid var(--accent);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .project-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+    }
+
+    .project-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      color: var(--warm);
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+
+    .project-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+    }
+
+    .project-desc {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+      font-weight: 300;
+    }
+
+    .project-tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .tool-tag {
+      padding: 0.25rem 0.75rem;
+      background: var(--light);
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    /* RESUME */
+    #resume {
+      text-align: center;
+      background: var(--parchment);
+    }
+
+    .resume-box {
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 3rem;
+      border: 1px solid var(--warm);
+    }
+
+    .resume-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .resume-box p {
+      color: var(--muted);
+      margin-bottom: 2rem;
+      line-height: 1.7;
+    }
+
+    /* CONTACT */
+    #contact { background: var(--ink); color: var(--parchment); }
+    #contact .section-label { color: var(--warm); }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .contact-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      line-height: 1.6;
+      color: #c8bfb0;
+      font-style: italic;
+    }
+
+    .contact-links { display: flex; flex-direction: column; gap: 1.5rem; }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      text-decoration: none;
+      color: var(--parchment);
+      padding: 1.25rem 1.5rem;
+      border: 1px solid #3a3530;
+      transition: all 0.2s;
+    }
+
+    .contact-link:hover {
+      border-color: var(--warm);
+      background: #2a2520;
+    }
+
+    .contact-link-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--warm);
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
+    .contact-link-value { font-size: 1rem; }
+
+    /* FOOTER */
+    footer {
+      background: var(--ink);
+      border-top: 1px solid #3a3530;
+      padding: 2rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-content > * {
+      animation: fadeUp 0.7s ease forwards;
+      opacity: 0;
+    }
+
+    .hero-label { animation-delay: 0.1s; }
+    .hero-name { animation-delay: 0.2s; }
+    .hero-tagline { animation-delay: 0.3s; }
+    .btn { animation-delay: 0.4s; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-name">Derek Daly</div>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#resume">Resume</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <p class="hero-label">Statistics & Data Analysis</p>
+    <h1 class="hero-name">Derek<br><em>Daly</em></h1>
+    <p class="hero-tagline">A junior transfer student at UCLA passionate about using statistics and history to better understand the world — and make a meaningful contribution to it.</p>
+    <a href="#about" class="btn">Learn More</a>
+  </div>
+  <div class="hero-photo-placeholder">
+    <span>📷</span>
+    <p>Add your photo here</p>
+    <small>Replace with your image file</small>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <p class="section-label">About Me</p>
+  <h2 class="section-title">A little about myself</h2>
+  <div class="about-grid">
+    <div class="about-text">
+      <p>I'm a junior transfer student at UCLA, originally from a small town outside of Boston, Massachusetts. My passion for history and statistics comes from a deep fascination with wanting to better understand the world around me — so I can eventually make a meaningful and positive contribution to the planet.</p>
+      <p>Growing up near Boston gave me an appreciation for the stories that data can tell about the past and present. I believe that numbers, when understood in their historical and social context, are one of the most powerful tools we have for creating positive change.</p>
+      <div class="skills-list" style="margin-top:2rem">
+        <span class="skill-tag">R</span>
+        <span class="skill-tag">Data Analysis</span>
+        <span class="skill-tag">Statistical Modeling</span>
+        <span class="skill-tag">Data Visualization</span>
+        <span class="skill-tag">Quarto</span>
+        <span class="skill-tag">R Markdown</span>
+      </div>
+    </div>
+    <div class="about-details">
+      <div class="detail-item">
+        <p class="detail-label">University</p>
+        <p class="detail-value">UCLA</p>
+      </div>
+      <div class="detail-item">
+        <p class="detail-label">Year</p>
+        <p class="detail-value">Junior Transfer</p>
+      </div>
+      <div class="detail-item">
+        <p class="detail-label">Major</p>
+        <p class="detail-value">Statistics</p>
+      </div>
+      <div class="detail-item">
+        <p class="detail-label">From</p>
+        <p class="detail-value">Boston, Massachusetts</p>
+      </div>
+      <div class="detail-item">
+        <p class="detail-label">Interests</p>
+        <p class="detail-value">History, Statistics, Data for Social Good</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <p class="section-label">My Work</p>
+  <h2 class="section-title">Projects</h2>
+  <div class="projects-grid">
+
+    <div class="project-card">
+      <div class="project-number">01</div>
+      <h3 class="project-title">The Marriage Penalty: A Census Income Analysis</h3>
+      <p class="project-desc">Investigated whether marriage is a financial penalty for men using 1994 US Census data. Built an interactive heatmap visualization showing income rates by marital status and education level. Findings challenged the common narrative — married men consistently out-earn never-married men across nearly every education level.</p>
+      <div class="project-tools">
+        <span class="tool-tag">R</span>
+        <span class="tool-tag">ggplot2</span>
+        <span class="tool-tag">dplyr</span>
+        <span class="tool-tag">Quarto</span>
+        <span class="tool-tag">RevealJS</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-number">02</div>
+      <h3 class="project-title">Pokémon Data Analysis</h3>
+      <p class="project-desc">Exploratory data analysis of Pokémon statistics using R. Analyzed patterns in base stats, types, and generations to uncover trends across the Pokémon universe. Created visualizations showcasing distributions and correlations between key attributes.</p>
+      <div class="project-tools">
+        <span class="tool-tag">R</span>
+        <span class="tool-tag">ggplot2</span>
+        <span class="tool-tag">R Markdown</span>
+        <span class="tool-tag">Data Visualization</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-number">03</div>
+      <h3 class="project-title">More Projects Coming Soon</h3>
+      <p class="project-desc">Currently developing new projects at the intersection of statistics and social impact. Areas of interest include historical data analysis, public health statistics, and data journalism.</p>
+      <div class="project-tools">
+        <span class="tool-tag">R</span>
+        <span class="tool-tag">Statistics</span>
+        <span class="tool-tag">In Progress</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- RESUME -->
+<section id="resume">
+  <p class="section-label">Resume</p>
+  <h2 class="section-title">My Resume</h2>
+  <div class="resume-box">
+    <div class="resume-icon">📄</div>
+    <p>Download my resume to learn more about my education, experience, and skills.</p>
+    <a href="resume.pdf" class="btn" download>Download Resume (PDF)</a>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <p class="section-label">Get In Touch</p>
+  <h2 class="section-title">Contact</h2>
+  <div class="contact-grid">
+    <p class="contact-text">"Statistics is the grammar of science — and I'm here to tell its stories."</p>
+    <div class="contact-links">
+      <a href="mailto:your.email@ucla.edu" class="contact-link">
+        <div>
+          <span class="contact-link-label">Email</span>
+          <span class="contact-link-value">your.email@ucla.edu</span>
+        </div>
+      </a>
+      <a href="https://linkedin.com/in/derekdaly" class="contact-link" target="_blank">
+        <div>
+          <span class="contact-link-label">LinkedIn</span>
+          <span class="contact-link-value">linkedin.com/in/derekdaly</span>
+        </div>
+      </a>
+      <a href="https://github.com/derekjdaly" class="contact-link" target="_blank">
+        <div>
+          <span class="contact-link-label">GitHub</span>
+          <span class="contact-link-value">github.com/derekjdaly</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2026 Derek Daly</span>
+  <span>Built with HTML & CSS · Hosted on GitHub Pages</span>
+</footer>
+
+</body>
+</html>
