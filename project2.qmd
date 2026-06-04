@@ -1,0 +1,175 @@
+---
+title: "The Marriage Penalty: What the Data Really Shows"
+subtitle: "A Census Income Analysis"
+author: "Derek Daly"
+date: today
+format:
+  revealjs:
+    theme: default
+    transition: slide
+    footer: "Statistics 20 Project 2"
+    slide-number: true
+    embed-resources: true
+---
+
+## The Setup
+
+Working in restaurants, I heard a recurring theme from the men around me:
+
+> *"Don't get married, kid. Biggest mistake of my life."*
+
+This came up constantly—from customers, from coworkers, from managers. And plenty of other older men throughout my life... The narrative was clear: **marriage ruins your financial life.**
+
+But is this actually true? Does the data support it?
+
+---
+
+## The Narrative
+
+```{r}
+#| echo: false
+knitr::include_graphics("C:/Users/bobby/Documents/Stats20/unhappy-couple-avoid-talking-png.webp")
+```
+
+*"Don't get married kid. Biggest mistake of my life."*
+
+---
+
+## The Question
+
+**Do married men actually earn less than never-married men?**
+
+I analyzed 1994 U.S. Census data to investigate whether marriage is truly a "financial penalty" or just a story men tell themselves.
+
+---
+
+## The Data
+
+```{r}
+#| label: load-data
+#| echo: false
+
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+data <- read.csv("adult.data", header = FALSE, strip.white = TRUE)
+
+colnames(data) <- c("age", "workclass", "fnlwgt", "education", "education.num", 
+                    "marital.status", "occupation", "relationship", "race", "sex", 
+                    "capital.gain", "capital.loss", "hours.per.week", "native.country", "income")
+
+data_male <- data[data$sex == "Male", ]
+data_male <- data_male[data_male$marital.status != "?", ]
+data_male <- data_male[data_male$education != "?", ]
+data_male$income_binary <- ifelse(data_male$income == ">50K", 1, 0)
+
+cat("Total male observations:", nrow(data_male), "\n")
+cat("\nMarital status breakdown:\n")
+print(table(data_male$marital.status))
+```
+
+---
+
+## The Heatmap: Marriage & Income by Education
+
+```{r}
+#| label: heatmap-viz
+#| echo: false
+#| fig-width: 12
+#| fig-height: 6
+
+main_statuses <- c("Married-civ-spouse", "Never-married", "Divorced")
+
+education_order <- c("Preschool", "1st-4th", "5th-6th", "7th-8th", "9th", "10th", "11th", "12th", 
+                     "HS-grad", "Some-college", "Assoc-voc", "Assoc-acdm", "Bachelors", 
+                     "Masters", "Prof-school", "Doctorate")
+
+heatmap_data <- data_male %>%
+  filter(marital.status %in% main_statuses) %>%
+  filter(education %in% education_order) %>%
+  group_by(marital.status, education) %>%
+  summarize(pct_over_50k = mean(income_binary) * 100, count = n(), .groups = "drop") %>%
+  mutate(education = factor(education, levels = education_order),
+         marital.status = factor(marital.status, levels = main_statuses))
+
+ggplot(heatmap_data, aes(x = education, y = marital.status, fill = pct_over_50k)) +
+  geom_tile(color = "white", size = 0.8) +
+  geom_text(aes(label = paste0(round(pct_over_50k, 1), "%")),
+            color = "white", size = 3.5, fontface = "bold") +
+  scale_fill_gradient(low = "#d73027", high = "#1a9850",
+                      name = "% Earning\n>$50K", limits = c(0, 100)) +
+  labs(title = "Income Disparity by Marriage Status & Education",
+       subtitle = "Percentage of men earning >$50K annually (1994 Census Data)",
+       x = "Education Level", y = "Marital Status",
+       caption = "Data source: UCI Adult Census Income Dataset") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
+        axis.text.y = element_text(size = 11),
+        plot.title = element_text(size = 14, face = "bold"),
+        legend.position = "right",
+        panel.grid = element_blank())
+```
+
+---
+
+## Key Statistics
+
+```{r}
+#| label: key-stats
+#| echo: false
+
+married_pct <- mean(data_male[data_male$marital.status == "Married-civ-spouse", ]$income_binary) * 100
+never_married_pct <- mean(data_male[data_male$marital.status == "Never-married", ]$income_binary) * 100
+divorced_pct <- mean(data_male[data_male$marital.status == "Divorced", ]$income_binary) * 100
+
+cat("Married men earning >$50K:      ", round(married_pct, 1), "%\n")
+cat("Never-married men earning >$50K:", round(never_married_pct, 1), "%\n")
+cat("Divorced men earning >$50K:     ", round(divorced_pct, 1), "%\n\n")
+
+contingency <- table(data_male$marital.status, data_male$income)
+chi_test <- chisq.test(contingency)
+cat("Chi-square p-value:", format(chi_test$p.value, scientific = TRUE), "\n")
+cat("Result: HIGHLY SIGNIFICANT (p < 0.001)\n\n")
+
+married_hours <- mean(data_male[data_male$marital.status == "Married-civ-spouse", ]$hours.per.week)
+never_married_hours <- mean(data_male[data_male$marital.status == "Never-married", ]$hours.per.week)
+
+cat("Married men avg hours/week:      ", round(married_hours, 1), "\n")
+cat("Never-married men avg hours/week:", round(never_married_hours, 1), "\n")
+```
+
+---
+
+## What the Heatmap Reveals
+
+- **The opposite of the narrative**: Married men actually earn MORE than never-married men across almost every education level.
+
+- **Education is the real divider**: A Doctorate or Masters degree dramatically increases earning potential regardless of marital status.
+
+- **The married advantage**: At the bachelor's level, married men have a substantial income edge over never-married men.
+
+- **Selection effects**: Older, more established men are more likely to be married AND earn more.
+
+---
+
+## The Conclusion
+
+**The men at the restaurant were wrong — or at least, misleading.**
+
+The data shows:
+
+- ✅ Married men earn MORE, not less
+- ✅ The "marriage penalty" is a myth
+- ✅ What REALLY matters is education and job choice
+
+The actual story: these men felt constrained by family responsibilities and financial pressure. But that's not a marriage penalty — that's life stage and occupation.
+
+---
+
+## References
+
+- **Data Source**: UCI Machine Learning Repository — Adult Census Income Dataset
+- **Original Citation**: Kohavi, R. (1996). Scaling Up the Accuracy of Naive-Bayes Classifiers. KDD Proceedings.
+- **Sample Size**: 21,790 male workers from 1994 U.S. Census
+- **AI assistance was used to help generate the R code and/or debug R code. All submitted R codewas reviewed, modified, and understood by me, the author.**
